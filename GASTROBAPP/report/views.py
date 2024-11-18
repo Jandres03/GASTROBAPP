@@ -109,7 +109,7 @@ def ventas_api(request, venta_id=None):
                 return JsonResponse({"error": "El cuerpo de la solicitud debe estar en formato JSON."}, status=400)
 
         elif request.method == 'DELETE':
-            # Eliminar una venta existente
+          
             if not venta_id:
                 return JsonResponse({"error": "Se requiere el ID de la venta para eliminar."}, status=400)
 
