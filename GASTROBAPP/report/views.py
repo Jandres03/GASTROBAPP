@@ -72,7 +72,7 @@ def ventas_api(request, venta_id=None):
         elif request.method == 'POST':
             # Crear una nueva venta
             try:
-                data = json.loads(request.body)  # Parsear el JSON del cuerpo de la solicitud
+                data = json.loads(request.body)  
                 producto = data.get('producto')
                 valor = data.get('valor')
                 fecha = data.get('fecha')
