@@ -10,7 +10,7 @@ import json
 
 
 def index(request):
-    sells = Venta.objects.all().order_by('fecha')  # Asegúrate de ordenar por fecha
+    sells = Venta.objects.all().order_by('fecha') 
     df = pd.DataFrame(list(sells.values("fecha", "valor")))
 
     fig =  px.line(df, x="fecha", y="valor", markers=True)
@@ -18,14 +18,11 @@ def index(request):
     
 
     ventas = Venta.objects.all()
-
-    # Convertir los datos de ventas a un DataFrame de pandas
     df = pd.DataFrame(list(ventas.values("producto")))
 
-    # Contar el número de ventas por producto
     productos_mas_vendidos = df['producto'].value_counts()
 
-    # Crear un DataFrame con los productos más vendidos
+
     df_productos_mas_vendidos = pd.DataFrame(productos_mas_vendidos).reset_index()
     df_productos_mas_vendidos.columns = ['Producto', 'Ventas']
 
