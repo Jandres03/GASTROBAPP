@@ -26,16 +26,13 @@ def index(request):
     df_productos_mas_vendidos = pd.DataFrame(productos_mas_vendidos).reset_index()
     df_productos_mas_vendidos.columns = ['Producto', 'Ventas']
 
-    # Ordenar los productos por número de ventas
+
     df_productos_mas_vendidos = df_productos_mas_vendidos.sort_values(by='Ventas', ascending=False)
 
-    # Tomar los 10 productos más vendidos para el gráfico
     df_top_productos = df_productos_mas_vendidos.head(10)
 
-    # Crear el gráfico de barras horizontales con Plotly Express
     fig = px.bar(df_top_productos, x='Ventas', y='Producto', orientation='h')
     
-    # Convertir el gráfico a HTML
     plot_div2 = fig.to_html(full_html=False)
 
     
