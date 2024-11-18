@@ -44,9 +44,7 @@ def index(request):
 
 @csrf_exempt
 def ventas_api(request, venta_id=None):
-    """
-    Endpoint API para manejar GET, POST, PUT y DELETE de ventas.
-    """
+    
     try:
         if request.method == 'GET':
             if venta_id:
