@@ -87,7 +87,7 @@ def ventas_api(request, venta_id=None):
                 data = json.loads(request.body)
                 venta = Venta.objects.get(id=venta_id)
 
-                # Actualizar los campos de la venta
+               
                 venta.producto = data.get('producto', venta.producto)
                 venta.valor = data.get('valor', venta.valor)
                 venta.fecha = data.get('fecha', venta.fecha)
