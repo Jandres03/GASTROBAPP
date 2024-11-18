@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de Ventas</title>
+    <!-- Agregar enlaces a los estilos de Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <!-- Navbar brand with logo -->
+            <a class="navbar-brand" href="#">                
+                Reporte de Ventas
+            </a>
+        </div>
+    </nav>
+    
+    
+    
+    <div class="container">
+
+        <div class="mt-4">
+            <!-- Renderizar el gráfico de ventas -->
+            <h2 class="mt-5">Ventas por mes</h2>
+            {{ plot_div|safe }}
+            <h2 class="mt-5">Productos mas vendidos</h2>
+            {{ plot_div2|safe }}
+        </div>
+       
+        <h2 class="mt-5">Base de datos</h2>
+        <div class="table-responsive mt-3">
+            <!-- Renderizar la tabla de datos con estilos de Bootstrap -->
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Valor</th>
+                        <th>Producto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for venta in ventas %}
+                    <tr>
+                        <td>{{ venta.fecha }}</td>
+                        <td>{{ venta.valor }}</td>
+                        <td>{{ venta.producto }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Agregar los scripts de Bootstrap (jQuery y Popper.js) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <!-- Agregar el script de Bootstrap -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
