@@ -1,51 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reporte de Ventas</title>
-    <!-- Agregar enlaces a los estilos de Bootstrap -->
+    <title>Dashboard de Ventas</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
+
 <body>
+    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <!-- Navbar brand with logo -->
-            <a class="navbar-brand" href="#">                
-                Reporte de Ventas
-            </a>
+            <a class="navbar-brand" href="#">Dashboard de Ventas</a>
         </div>
     </nav>
-    
-    
-    
-    <div class="container">
 
-        <div class="mt-4">
-            <!-- Renderizar el gráfico de ventas -->
-            <h2 class="mt-5">Ventas por mes</h2>
-            {{ plot_div|safe }}
-            <h2 class="mt-5">Productos mas vendidos</h2>
-            {{ plot_div2|safe }}
+    <div class="container mt-4">
+        <!-- Sección de creación de ventas -->
+        <h2 class="mb-4">Agregar Venta</h2>
+        <form id="ventaForm" class="mb-5">
+            <div class="form-row align-items-center">
+                <div class="col-md-4 mb-3">
+                    <label for="producto">Producto</label>
+                    <input type="text" class="form-control" id="producto" placeholder="Nombre del Producto" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="valor">Valor</label>
+                    <input type="number" class="form-control" id="valor" placeholder="Valor de la Venta" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="fecha">Fecha</label>
+                    <input type="date" class="form-control" id="fecha" required>
+                </div>
+                <div class="col-md-12 text-right">
+                    <button type="button" class="btn btn-primary" onclick="crearVenta()">Agregar Venta</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Sección de gráficas -->
+        <h2 class="mb-4">Análisis de Ventas</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <h5>Ventas por Mes</h5>
+                <div class="border p-3 rounded bg-light">
+                    {{ plot_div|safe }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h5>Productos Más Vendidos</h5>
+                <div class="border p-3 rounded bg-light">
+                    {{ plot_div2|safe }}
+                </div>
+            </div>
         </div>
-       
-        <h2 class="mt-5">Base de datos</h2>
-        <div class="table-responsive mt-3">
-            <!-- Renderizar la tabla de datos con estilos de Bootstrap -->
+
+        <!-- Sección de tabla de ventas -->
+        <h2 class="mt-5 mb-4">Base de Datos de Ventas</h2>
+        <div class="table-responsive">
             <table class="table table-striped">
                 <thead class="thead-dark">
                     <tr>
                         <th>Fecha</th>
                         <th>Valor</th>
                         <th>Producto</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="tablaVentas">
                     {% for venta in ventas %}
-                    <tr>
+                    <tr id="venta-{{ venta.id }}">
                         <td>{{ venta.fecha }}</td>
                         <td>{{ venta.valor }}</td>
                         <td>{{ venta.producto }}</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm" onclick="editarVenta({{ venta.id }})">Editar</button>
+                            <button class="btn btn-danger btn-sm" onclick="eliminarVenta({{ venta.id }})">Eliminar</button>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -53,10 +85,84 @@
         </div>
     </div>
 
-    <!-- Agregar los scripts de Bootstrap (jQuery y Popper.js) -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <!-- Agregar el script de Bootstrap -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Agregar scripts necesarios -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        const apiUrl = '/api/ventas/';
+
+        // Crear una nueva venta
+        function crearVenta() {
+            const producto = $('#producto').val();
+            const valor = $('#valor').val();
+            const fecha = $('#fecha').val();
+
+            $.ajax({
+                url: apiUrl,
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    producto,
+                    valor,
+                    fecha
+                }),
+                success: function(data) {
+                    alert('Venta creada exitosamente.');
+                    location.reload();
+                },
+                error: function(error) {
+                    alert('Error al crear la venta.');
+                    console.log(error);
+                }
+            });
+        }
+
+        // Editar una venta existente
+        function editarVenta(id) {
+            const fila = $(`#venta-${id}`);
+            const producto = prompt('Nuevo producto:', fila.find('td:nth-child(3)').text());
+            const valor = prompt('Nuevo valor:', fila.find('td:nth-child(2)').text());
+            const fecha = prompt('Nueva fecha (YYYY-MM-DD):', fila.find('td:nth-child(1)').text());
+
+            if (producto && valor && fecha) {
+                $.ajax({
+                    url: `${apiUrl}${id}/`,
+                    method: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        producto,
+                        valor,
+                        fecha
+                    }),
+                    success: function(data) {
+                        alert('Venta actualizada exitosamente.');
+                        location.reload();
+                    },
+                    error: function(error) {
+                        alert('Error al actualizar la venta.');
+                        console.log(error);
+                    }
+                });
+            }
+        }
+
+        // Eliminar una venta existente
+        function eliminarVenta(id) {
+            if (confirm('¿Estás seguro de que deseas eliminar esta venta?')) {
+                $.ajax({
+                    url: `${apiUrl}${id}/`,
+                    method: 'DELETE',
+                    success: function(data) {
+                        alert('Venta eliminada exitosamente.');
+                        location.reload();
+                    },
+                    error: function(error) {
+                        alert('Error al eliminar la venta.');
+                        console.log(error);
+                    }
+                });
+            }
+        }
+    </script>
 </body>
+
 </html>

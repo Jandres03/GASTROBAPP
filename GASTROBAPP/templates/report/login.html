@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        
+        .header {
+            background-color: #444;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-size: 24px;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .alert {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        label {
+            font-weight: bold;
+            color: #555;
+        }
+        
+        input[type="text"],
+        input[type="password"] {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        button {
+            background-color: #444;
+            color: white;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #333;
+        }
+        
+        .register-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+        
+        .register-link a {
+            color: #444;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        Reporte de Ventas
+    </div>
+    <div class="container">
+        <h2>Iniciar Sesión</h2>
+        {% if error %}
+        <div class="alert">
+            {{ error }}
+        </div>
+        {% endif %}
+        <form method="post" action="{% url 'login' %}?next={{ request.GET.next }}">
+            {% csrf_token %}
+            <label for="username">Usuario</label>
+            <input type="text" id="username" name="username" placeholder="Ingrese su usuario" required>
+
+            <label for="password">Contraseña</label>
+            <input type="password" id="password" name="password" placeholder="Ingrese su contraseña" required>
+
+            <button type="submit">Iniciar Sesión</button>
+        </form>
+        <div class="register-link">
+            <p>¿No tienes una cuenta? <a href="{% url 'register' %}">Regístrate aquí</a></p>
+        </div>
+    </div>
+</body>
+
+</html>

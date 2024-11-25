@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        
+        .header {
+            background-color: #444;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-size: 24px;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .alert {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        label {
+            font-weight: bold;
+            color: #555;
+        }
+        
+        input[type="text"],
+        input[type="password"] {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        button {
+            background-color: #444;
+            color: white;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #333;
+        }
+        
+        .login-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+        
+        .login-link a {
+            color: #444;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        Reporte de Ventas
+    </div>
+    <div class="container">
+        <h2>Registro</h2>
+        <form method="post">
+            {% csrf_token %}
+            <label for="id_username">Usuario</label>
+            <input type="text" id="id_username" name="username" placeholder="Ingrese su usuario" required>
+
+            <label for="id_password1">Contraseña</label>
+            <input type="password" id="id_password1" name="password1" placeholder="Ingrese su contraseña" required>
+
+            <label for="id_password2">Confirmar Contraseña</label>
+            <input type="password" id="id_password2" name="password2" placeholder="Confirme su contraseña" required> {% if errors %}
+            <div style="color: red; margin-top: 10px;">
+                <ul>
+                    {% for field, error_list in errors.items %}
+                    <li>{{ field }}: {{ error_list|join:", " }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            <button type="submit">Registrar</button>
+        </form>
+
+        <div class="login-link">
+            <p>¿Ya tienes una cuenta? <a href="{% url 'login' %}">Inicia Sesión aquí</a></p>
+        </div>
+    </div>
+</body>
+
+</html>
